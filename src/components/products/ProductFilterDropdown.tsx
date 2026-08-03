@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import type { ReactNode } from "react";
 import { ChevronDownIcon } from "@/components/icons/ProductIcons";
 
 interface ProductFilterDropdownProps<T extends string> {
@@ -9,6 +10,8 @@ interface ProductFilterDropdownProps<T extends string> {
   allLabel: string;
   options: T[];
   onChange: (value: T | "All") => void;
+  /** Optional leading icon rendered before the label, e.g. Returns' Date Range/Vendor/Reason filters. */
+  icon?: ReactNode;
 }
 
 /** "Label: Value ▾" filter control used for Category/Vendor/Fulfillment on the Products screen. */
@@ -18,6 +21,7 @@ export function ProductFilterDropdown<T extends string>({
   allLabel,
   options,
   onChange,
+  icon,
 }: ProductFilterDropdownProps<T>) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -43,6 +47,7 @@ export function ProductFilterDropdown<T extends string>({
           value !== "All" ? "border-primary text-primary" : "border-border text-ink hover:bg-surface-tint"
         }`}
       >
+        {icon}
         <span className="font-medium text-gray-500">{label}:</span>
         <span className="font-semibold">{value === "All" ? allLabel : value}</span>
         <ChevronDownIcon className="size-3 text-gray-400" />
