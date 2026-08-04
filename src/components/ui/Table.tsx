@@ -1,4 +1,4 @@
-import type { ReactNode, TdHTMLAttributes, ThHTMLAttributes } from "react";
+import type { HTMLAttributes, ReactNode, TdHTMLAttributes, ThHTMLAttributes } from "react";
 
 export function Table({ children }: { children: ReactNode }) {
   return (
@@ -16,8 +16,14 @@ export function TableBody({ children }: { children: ReactNode }) {
   return <tbody>{children}</tbody>;
 }
 
-export function TableRow({ children }: { children: ReactNode }) {
-  return <tr className="[&>td]:border-t [&>td]:border-border">{children}</tr>;
+/** `className`/`onClick`/etc. are optional passthroughs — added for `TicketList`'s clickable,
+ * selectable rows; every existing caller keeps rendering a plain, non-interactive row. */
+export function TableRow({ children, className = "", ...rest }: { children: ReactNode; className?: string } & HTMLAttributes<HTMLTableRowElement>) {
+  return (
+    <tr className={`[&>td]:border-t [&>td]:border-border ${className}`} {...rest}>
+      {children}
+    </tr>
+  );
 }
 
 export function TableHeaderCell({ children, className = "", ...rest }: ThHTMLAttributes<HTMLTableCellElement>) {

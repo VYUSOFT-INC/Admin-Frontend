@@ -7,6 +7,7 @@ import { CustomerSearchBar } from "@/components/customers/CustomerSearchBar";
 import { CustomerProfileCard } from "@/components/customers/CustomerProfileCard";
 import { CustomerOrdersTable } from "@/components/customers/CustomerOrdersTable";
 import { CustomerAdminActions } from "@/components/customers/CustomerAdminActions";
+import { CustomerSearchEmptyState } from "@/components/customers/CustomerSearchEmptyState";
 import { CUSTOMERS, type Customer } from "@/lib/mock-data/customers";
 
 /** Normalizes phone numbers so "+91 98765 43210" matches a query of "9876543210" or "98765". */
@@ -17,15 +18,14 @@ function normalizePhone(value: string): string {
 export default function CustomersPage() {
   const [customers, setCustomers] = useState<Customer[]>(CUSTOMERS);
   const [query, setQuery] = useState("");
-  const [searchedQuery, setSearchedQuery] = useState("");
+  // `null` = the admin hasn't searched yet (Figma's "Search for a customer to view their
+  // profile." empty state, node 1071:10286) — distinct from a searched-but-empty string.
+  const [searchedQuery, setSearchedQuery] = useState<string | null>(null);
 
-  // Mirrors the Figma design's always-populated profile card: land on the first customer
-  // until the admin actually searches for someone else.
   const matchedCustomer = useMemo(() => {
+    if (searchedQuery === null) return null;
     const trimmed = searchedQuery.trim();
-    if (trimmed.length === 0) {
-      return customers[0] ?? null;
-    }
+    if (trimmed.length === 0) return null;
     const q = trimmed.toLowerCase();
     const qDigits = normalizePhone(trimmed);
     return (
@@ -40,7 +40,10 @@ export default function CustomersPage() {
   }, [customers, searchedQuery]);
 
   function handleSearch() {
-    setSearchedQuery(query);
+    const trimmed = query.trim();
+    // An empty submission goes back to the initial empty state rather than surfacing a
+    // confusing "No customer found for \"\"" message.
+    setSearchedQuery(trimmed.length === 0 ? null : trimmed);
   }
 
   function handleToggleBlock(customerId: string) {
@@ -66,7 +69,9 @@ export default function CustomersPage() {
       <div className="flex flex-col gap-6">
         <CustomerSearchBar query={query} onQueryChange={setQuery} onSearch={handleSearch} />
 
-        {matchedCustomer ? (
+        {searchedQuery === null ? (
+          <CustomerSearchEmptyState />
+        ) : matchedCustomer ? (
           <>
             <CustomerProfileCard customer={matchedCustomer} />
             <CustomerOrdersTable orders={matchedCustomer.recentOrders} />

@@ -1,7 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { AdminIcon, CalendarIcon } from "@/components/icons/NavIcons";
+import { BellIcon } from "@/components/icons/NotificationIcons";
+import { NOTIFICATIONS } from "@/lib/mock-data/notifications";
 
 export interface TopbarProps {
   title: string;
@@ -14,6 +17,13 @@ const TODAY_LABEL = new Intl.DateTimeFormat("en-GB", {
   year: "numeric",
 }).format(new Date());
 
+// Whether the bell shows an unread badge, computed once from the bundled mock dataset (see
+// `src/lib/mock-data/notifications.ts`). This is a static snapshot, not a live subscription —
+// like every other cross-screen mock-data reference in this app, there's no shared store yet, so
+// marking notifications read/unread on the Notifications screen doesn't feed back into this badge
+// mid-session.
+const HAS_UNREAD_NOTIFICATIONS = NOTIFICATIONS.some((notification) => !notification.read);
+
 export function Topbar({ title, description }: TopbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -25,6 +35,17 @@ export function Topbar({ title, description }: TopbarProps) {
       </div>
 
       <div className="flex shrink-0 items-center gap-3">
+        <Link
+          href="/notifications"
+          aria-label="Notifications"
+          className="relative flex size-[34px] shrink-0 items-center justify-center rounded-[10px] border border-border bg-white hover:bg-surface-tint"
+        >
+          <BellIcon className="size-4 text-ink" />
+          {HAS_UNREAD_NOTIFICATIONS && (
+            <span className="absolute right-[5px] top-[5px] size-2 rounded-sm border border-white bg-primary" aria-hidden />
+          )}
+        </Link>
+
         <div className="flex min-h-[38px] items-center gap-2 rounded-full border border-border bg-white px-[13px] py-[9px]">
           <CalendarIcon className="size-5 text-ink" />
           <span className="text-[13px] font-bold text-ink">Today &middot; {TODAY_LABEL}</span>

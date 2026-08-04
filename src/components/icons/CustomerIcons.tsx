@@ -86,6 +86,30 @@ export function BlockIcon(props: IconProps) {
   );
 }
 
+/** Empty-state icon ("Search for a customer to view their profile.") — two overlapping person
+ * silhouettes, from the Figma "customer search" (1071:10286) frame's initial/no-search state.
+ * Non-square viewBox preserved as exported (see public/assets/icons/customers/search-empty-users.svg). */
+export function CustomersGroupIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 25.6667 23.3333" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path
+        d="M17.5 22.1667V19.8333C17.5 17.2577 15.4089 15.1667 12.8333 15.1667H5.83333C3.25773 15.1667 1.16667 17.2577 1.16667 19.8333V22.1667M17.5 1.316C19.5582 1.84959 20.9956 3.70705 20.9956 5.83333C20.9956 7.95962 19.5582 9.81707 17.5 10.3507M24.5 22.1667V19.8333C24.4984 17.7066 23.0592 15.85 21 15.3183"
+        stroke="currentColor"
+        strokeWidth="2.33333"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M4.66667 5.83333C4.66667 8.40894 6.75773 10.5 9.33333 10.5C11.9089 10.5 14 8.40894 14 5.83333C14 3.25773 11.9089 1.16667 9.33333 1.16667C6.75773 1.16667 4.66667 3.25773 4.66667 5.83333H4.66667"
+        stroke="currentColor"
+        strokeWidth="2.33333"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 /** "Add Admin Note" action button icon — a pencil writing on a line. */
 export function NoteIcon(props: IconProps) {
   return (
