@@ -118,3 +118,48 @@ export function AdminIcon(props: IconProps) {
     </svg>
   );
 }
+
+/**
+ * "My Profile" item icon in the Super Admin dropdown menu (Figma "super admin drop down", node
+ * 1088:672/1088:710). Distinct from `OrdersIcon.PersonIcon`-style glyphs elsewhere in the app
+ * (flat-shoulder body) — this one uses a rounded/arc body, so it's kept as its own icon rather
+ * than reused. Source: public/assets/icons/topbar/profile.svg.
+ */
+export function ProfileIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 12.75 14.1667" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path d="M2.83333 4.25C2.83333 6.2047 4.4203 7.79167 6.375 7.79167C8.3297 7.79167 9.91667 6.2047 9.91667 4.25C9.91667 2.2953 8.3297 0.708333 6.375 0.708333C4.4203 0.708333 2.83333 2.2953 2.83333 4.25V4.25" stroke="currentColor" strokeWidth="1.41667" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M12.0417 13.4583C12.0417 10.3308 9.50252 7.79167 6.375 7.79167C3.24748 7.79167 0.708333 10.3308 0.708333 13.4583" stroke="currentColor" strokeWidth="1.41667" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+/**
+ * "Change Password" item icon in the Super Admin dropdown menu — a plain padlock (no keyhole
+ * dot), which is what distinguishes it from `AuthIcons.LockIcon` (3 paths, includes a keyhole)
+ * used on the sign-in/reset-password screens. Source: public/assets/icons/topbar/change-password.svg.
+ */
+export function ChangePasswordIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 14.1667 15.5833" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path d="M2.125 7.08333H12.0417C12.8235 7.08333 13.4583 7.71812 13.4583 8.5V13.4583C13.4583 14.2402 12.8235 14.875 12.0417 14.875H2.125C1.34312 14.875 0.708333 14.2402 0.708333 13.4583V8.5C0.708333 7.71812 1.34312 7.08333 2.125 7.08333V7.08333" stroke="currentColor" strokeWidth="1.41667" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M3.54167 7.08333V4.25C3.54167 2.2953 5.12863 0.708333 7.08333 0.708333C9.03803 0.708333 10.625 2.2953 10.625 4.25V7.08333" stroke="currentColor" strokeWidth="1.41667" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+/** "Logout" item icon in the Super Admin dropdown menu — an arrow exiting a box.
+ * Source: public/assets/icons/topbar/logout.svg. */
+export function LogoutIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path
+        d="M11.3333 12.0417L14.875 8.5L11.3333 4.95833M14.875 8.5H6.375M6.375 14.875H3.54167C2.75979 14.875 2.125 14.2402 2.125 13.4583V3.54167C2.125 2.75979 2.75979 2.125 3.54167 2.125H6.375"
+        stroke="currentColor"
+        strokeWidth="1.41667"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
