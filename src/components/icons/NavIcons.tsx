@@ -163,3 +163,23 @@ export function LogoutIcon(props: IconProps) {
     </svg>
   );
 }
+
+/**
+ * Trailing "go to result" arrow shown on every row of the global search dropdown (Figma
+ * "search drop down", node 1092:1233) — a horizontal line with a chevron head, distinct from
+ * `VendorIcons.ChevronRightIcon`'s bare chevron (no line) used for pagination.
+ * Source: public/assets/icons/topbar/search-result-arrow.svg.
+ */
+export function SearchResultArrowIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path
+        d="M2.91667 7H11.0833M7 2.91667L11.0833 7L7 11.0833"
+        stroke="currentColor"
+        strokeWidth="1.16667"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}

@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Card } from "@/components/ui/Card";
 import { CustomerSearchBar } from "@/components/customers/CustomerSearchBar";
@@ -15,12 +16,26 @@ function normalizePhone(value: string): string {
   return value.replace(/\D/g, "");
 }
 
-export default function CustomersPage() {
+function CustomersPageContent() {
+  const searchParams = useSearchParams();
   const [customers, setCustomers] = useState<Customer[]>(CUSTOMERS);
   const [query, setQuery] = useState("");
   // `null` = the admin hasn't searched yet (Figma's "Search for a customer to view their
   // profile." empty state, node 1071:10286) — distinct from a searched-but-empty string.
   const [searchedQuery, setSearchedQuery] = useState<string | null>(null);
+
+  // The Topbar's global search deep-links here with `?q=<name>` (customers don't have their own
+  // `/customers/[id]` detail route yet — see `src/lib/mock-data/customers.ts`), so a result
+  // selected there resolves to a real, populated profile instead of a dead link. Re-runs whenever
+  // the query param changes so picking a different customer from the global search while already
+  // on this page updates the profile shown.
+  useEffect(() => {
+    const q = searchParams.get("q");
+    if (q && q.trim().length > 0) {
+      setQuery(q);
+      setSearchedQuery(q);
+    }
+  }, [searchParams]);
 
   const matchedCustomer = useMemo(() => {
     if (searchedQuery === null) return null;
@@ -91,5 +106,13 @@ export default function CustomersPage() {
         )}
       </div>
     </AdminLayout>
+  );
+}
+
+export default function CustomersPage() {
+  return (
+    <Suspense fallback={null}>
+      <CustomersPageContent />
+    </Suspense>
   );
 }

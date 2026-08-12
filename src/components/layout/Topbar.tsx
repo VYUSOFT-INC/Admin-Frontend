@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { AdminIcon, CalendarIcon, ChangePasswordIcon, LogoutIcon, ProfileIcon } from "@/components/icons/NavIcons";
 import { BellIcon } from "@/components/icons/NotificationIcons";
+import { GlobalSearch } from "@/components/layout/GlobalSearch";
 import { NOTIFICATIONS } from "@/lib/mock-data/notifications";
 
 export interface TopbarProps {
@@ -64,10 +65,21 @@ export function Topbar({ title, description }: TopbarProps) {
   }
 
   return (
-    <header className="flex h-[72px] shrink-0 items-center justify-between border-b border-border bg-white px-7">
-      <div>
-        <h1 className="text-2xl font-extrabold tracking-[-0.72px] text-ink">{title}</h1>
-        {description && <p className="text-[13px] font-medium text-gray-500">{description}</p>}
+    <header className="flex h-[72px] shrink-0 items-center gap-4 border-b border-border bg-white px-7">
+      <div className="min-w-0 max-w-[360px]">
+        <h1 className="truncate text-2xl font-extrabold tracking-[-0.72px] text-ink">{title}</h1>
+        {description && <p className="truncate text-[13px] font-medium text-gray-500">{description}</p>}
+      </div>
+
+      {/* min-w-[160px] (not min-w-0) is load-bearing: a plain `flex-1` resolves to
+          `flex: 1 1 0%`, and when the header is even a few px over budget, flexbox's shrink
+          algorithm gives zero-basis items zero share of the shrinkage — this slot would
+          collapse straight to 0px (search box disappears entirely) while the title barely
+          shrank, instead of both shrinking gracefully. The explicit floor guarantees the
+          search box always renders at a usable width; the title (which has real `min-w-0`
+          and `truncate`) absorbs the rest of the squeeze via ellipsis on narrow viewports. */}
+      <div className="flex min-w-[160px] flex-1 justify-center">
+        <GlobalSearch />
       </div>
 
       <div className="flex shrink-0 items-center gap-3">
