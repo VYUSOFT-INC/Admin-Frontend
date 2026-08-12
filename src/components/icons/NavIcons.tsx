@@ -114,7 +114,7 @@ export function AdminIcon(props: IconProps) {
   return (
     <svg viewBox="0 0 9.33333 11.6667" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <path d="M8.75 11.0833V9.91667C8.75 8.62886 7.70447 7.58333 6.41667 7.58333H2.91667C1.62886 7.58333 0.583333 8.62886 0.583333 9.91667V11.0833" stroke="currentColor" strokeWidth="1.16667" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M2.33333 2.91667C2.33333 4.20447 3.37886 5.25 4.66667 5.25C5.95447 5.25 7 4.20447 7 2.91667C7 1.62886 5.95447 0.583333 4.66667 0.583333C3.37886 0.583333 2.33333 1.62886 2.33333 2.91667C2.33333 2.91667" stroke="currentColor" strokeWidth="1.16667" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M2.33333 2.91667C2.33333 4.20447 3.37886 5.25 4.66667 5.25C5.95447 5.25 7 4.20447 7 2.91667C7 1.62886 5.95447 0.583333 4.66667 0.583333C3.37886 0.583333 2.33333 1.62886 2.33333 2.91667Z" stroke="currentColor" strokeWidth="1.16667" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }

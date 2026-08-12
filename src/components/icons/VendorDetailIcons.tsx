@@ -76,6 +76,24 @@ export function SaveIcon(props: IconProps) {
   );
 }
 
+export function ZoomOutIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 13.3333 13.3333" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path d="M0.666667 6C0.666667 8.94355 3.05645 11.3333 6 11.3333C8.94355 11.3333 11.3333 8.94355 11.3333 6C11.3333 3.05645 8.94355 0.666667 6 0.666667C3.05645 0.666667 0.666667 3.05645 0.666667 6V6" stroke="currentColor" strokeWidth="1.33333" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M12.6667 12.6667L9.76667 9.76667M4 6H8" stroke="currentColor" strokeWidth="1.33333" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function ZoomInIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 13.3333 13.3333" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path d="M0.666667 6C0.666667 8.94355 3.05645 11.3333 6 11.3333C8.94355 11.3333 11.3333 8.94355 11.3333 6C11.3333 3.05645 8.94355 0.666667 6 0.666667C3.05645 0.666667 0.666667 3.05645 0.666667 6V6" stroke="currentColor" strokeWidth="1.33333" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M12.6667 12.6667L9.76667 9.76667M6 4V8M4 6H8" stroke="currentColor" strokeWidth="1.33333" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 export function CertificateIcon(props: IconProps) {
   return (
     <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>

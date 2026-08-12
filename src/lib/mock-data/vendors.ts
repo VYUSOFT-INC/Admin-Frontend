@@ -7,6 +7,10 @@ export type KycDocumentStatus = "Verified" | "Pending" | "Rejected";
 export interface KycDocument {
   name: string;
   status: KycDocumentStatus;
+  /** Display date for "Uploaded on {date}" / "Uploaded by {vendor} · {date}" in the document
+   *  viewer. Optional because `src/lib/mock-data/products.ts` reuses this same `KycDocument`
+   *  type for its own KYC summary card, which doesn't surface an upload date. */
+  uploadedOn?: string;
 }
 
 export interface Vendor {
@@ -57,10 +61,10 @@ export const VENDORS: Vendor[] = [
     businessDescription:
       "Urban Thread House offers curated men's fashion — from casual streetwear to semi-formal kurtas, targeting the 18–35 age group across India.",
     kycDocuments: [
-      { name: "GST Certificate", status: "Verified" },
-      { name: "PAN Card", status: "Verified" },
-      { name: "Cancelled Cheque", status: "Pending" },
-      { name: "Address Proof", status: "Pending" },
+      { name: "GST Certificate", status: "Verified", uploadedOn: "14 June 2025" },
+      { name: "PAN Card", status: "Verified", uploadedOn: "14 June 2025" },
+      { name: "Cancelled Cheque", status: "Pending", uploadedOn: "15 June 2025" },
+      { name: "Address Proof", status: "Pending", uploadedOn: "15 June 2025" },
     ],
   },
   {
@@ -85,10 +89,10 @@ export const VENDORS: Vendor[] = [
     businessDescription:
       "Green Loom Studio designs sustainable, handloom-based women's apparel using organic cotton and natural dyes, sold direct-to-consumer online.",
     kycDocuments: [
-      { name: "GST Certificate", status: "Pending" },
-      { name: "PAN Card", status: "Verified" },
-      { name: "Cancelled Cheque", status: "Pending" },
-      { name: "Address Proof", status: "Verified" },
+      { name: "GST Certificate", status: "Pending", uploadedOn: "11 June 2025" },
+      { name: "PAN Card", status: "Verified", uploadedOn: "11 June 2025" },
+      { name: "Cancelled Cheque", status: "Pending", uploadedOn: "12 June 2025" },
+      { name: "Address Proof", status: "Verified", uploadedOn: "12 June 2025" },
     ],
   },
   {
@@ -113,10 +117,10 @@ export const VENDORS: Vendor[] = [
     businessDescription:
       "Velora Styles is a verified women's fashion label offering contemporary ethnic and western wear, with over 148 SKUs shipped pan-India.",
     kycDocuments: [
-      { name: "GST Certificate", status: "Verified" },
-      { name: "PAN Card", status: "Verified" },
-      { name: "Cancelled Cheque", status: "Verified" },
-      { name: "Address Proof", status: "Verified" },
+      { name: "GST Certificate", status: "Verified", uploadedOn: "2 March 2025" },
+      { name: "PAN Card", status: "Verified", uploadedOn: "2 March 2025" },
+      { name: "Cancelled Cheque", status: "Verified", uploadedOn: "3 March 2025" },
+      { name: "Address Proof", status: "Verified", uploadedOn: "3 March 2025" },
     ],
   },
   {
@@ -141,10 +145,10 @@ export const VENDORS: Vendor[] = [
     businessDescription:
       "North Square Atelier curates a multi-brand assortment across apparel, accessories, and footwear from its flagship Delhi storefront.",
     kycDocuments: [
-      { name: "GST Certificate", status: "Verified" },
-      { name: "PAN Card", status: "Verified" },
-      { name: "Cancelled Cheque", status: "Verified" },
-      { name: "Address Proof", status: "Pending" },
+      { name: "GST Certificate", status: "Verified", uploadedOn: "18 January 2025" },
+      { name: "PAN Card", status: "Verified", uploadedOn: "18 January 2025" },
+      { name: "Cancelled Cheque", status: "Verified", uploadedOn: "19 January 2025" },
+      { name: "Address Proof", status: "Pending", uploadedOn: "19 January 2025" },
     ],
   },
   {
@@ -169,10 +173,10 @@ export const VENDORS: Vendor[] = [
     businessDescription:
       "Kraze Fashion sells streetwear and graphic apparel targeted at younger buyers, currently suspended pending review of repeated shipping delays.",
     kycDocuments: [
-      { name: "GST Certificate", status: "Verified" },
-      { name: "PAN Card", status: "Verified" },
-      { name: "Cancelled Cheque", status: "Rejected" },
-      { name: "Address Proof", status: "Verified" },
+      { name: "GST Certificate", status: "Verified", uploadedOn: "29 October 2024" },
+      { name: "PAN Card", status: "Verified", uploadedOn: "29 October 2024" },
+      { name: "Cancelled Cheque", status: "Rejected", uploadedOn: "30 October 2024" },
+      { name: "Address Proof", status: "Verified", uploadedOn: "30 October 2024" },
     ],
   },
   {
@@ -197,10 +201,10 @@ export const VENDORS: Vendor[] = [
     businessDescription:
       "Harbor Blend Collective is a lifestyle concept store blending home decor, apparel, and wellness products across its Kochi outlet.",
     kycDocuments: [
-      { name: "GST Certificate", status: "Verified" },
-      { name: "PAN Card", status: "Verified" },
-      { name: "Cancelled Cheque", status: "Verified" },
-      { name: "Address Proof", status: "Verified" },
+      { name: "GST Certificate", status: "Verified", uploadedOn: "7 February 2025" },
+      { name: "PAN Card", status: "Verified", uploadedOn: "7 February 2025" },
+      { name: "Cancelled Cheque", status: "Verified", uploadedOn: "8 February 2025" },
+      { name: "Address Proof", status: "Verified", uploadedOn: "8 February 2025" },
     ],
   },
   {
@@ -225,10 +229,10 @@ export const VENDORS: Vendor[] = [
     businessDescription:
       "Maple Wear Co. is a newly registered kidswear and family apparel brand awaiting its first compliance review.",
     kycDocuments: [
-      { name: "GST Certificate", status: "Pending" },
-      { name: "PAN Card", status: "Pending" },
-      { name: "Cancelled Cheque", status: "Pending" },
-      { name: "Address Proof", status: "Pending" },
+      { name: "GST Certificate", status: "Pending", uploadedOn: "20 June 2025" },
+      { name: "PAN Card", status: "Pending", uploadedOn: "20 June 2025" },
+      { name: "Cancelled Cheque", status: "Pending", uploadedOn: "21 June 2025" },
+      { name: "Address Proof", status: "Pending", uploadedOn: "21 June 2025" },
     ],
   },
   {
@@ -253,10 +257,10 @@ export const VENDORS: Vendor[] = [
     businessDescription:
       "Blaze Zone's application was rejected after submitted GST and address documents failed verification.",
     kycDocuments: [
-      { name: "GST Certificate", status: "Rejected" },
-      { name: "PAN Card", status: "Verified" },
-      { name: "Cancelled Cheque", status: "Rejected" },
-      { name: "Address Proof", status: "Rejected" },
+      { name: "GST Certificate", status: "Rejected", uploadedOn: "3 May 2025" },
+      { name: "PAN Card", status: "Verified", uploadedOn: "3 May 2025" },
+      { name: "Cancelled Cheque", status: "Rejected", uploadedOn: "4 May 2025" },
+      { name: "Address Proof", status: "Rejected", uploadedOn: "4 May 2025" },
     ],
   },
   {
@@ -281,10 +285,10 @@ export const VENDORS: Vendor[] = [
     businessDescription:
       "Aurel Lane is one of the platform's top-performing women's fashion sellers, with 213 active listings and a verified seller badge.",
     kycDocuments: [
-      { name: "GST Certificate", status: "Verified" },
-      { name: "PAN Card", status: "Verified" },
-      { name: "Cancelled Cheque", status: "Verified" },
-      { name: "Address Proof", status: "Verified" },
+      { name: "GST Certificate", status: "Verified", uploadedOn: "15 November 2024" },
+      { name: "PAN Card", status: "Verified", uploadedOn: "15 November 2024" },
+      { name: "Cancelled Cheque", status: "Verified", uploadedOn: "16 November 2024" },
+      { name: "Address Proof", status: "Verified", uploadedOn: "16 November 2024" },
     ],
   },
   {
@@ -309,10 +313,10 @@ export const VENDORS: Vendor[] = [
     businessDescription:
       "Moss & Clay, a home linen seller, was suspended pending review of a spike in customer return requests.",
     kycDocuments: [
-      { name: "GST Certificate", status: "Verified" },
-      { name: "PAN Card", status: "Verified" },
-      { name: "Cancelled Cheque", status: "Verified" },
-      { name: "Address Proof", status: "Rejected" },
+      { name: "GST Certificate", status: "Verified", uploadedOn: "8 September 2024" },
+      { name: "PAN Card", status: "Verified", uploadedOn: "8 September 2024" },
+      { name: "Cancelled Cheque", status: "Verified", uploadedOn: "9 September 2024" },
+      { name: "Address Proof", status: "Rejected", uploadedOn: "9 September 2024" },
     ],
   },
 ];

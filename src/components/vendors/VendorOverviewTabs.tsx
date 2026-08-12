@@ -1,10 +1,18 @@
 "use client";
 
-import { Badge } from "@/components/ui/Badge";
+import { useState } from "react";
 import { Card } from "@/components/ui/Card";
-import { CertificateIcon, IdCardIcon, ReceiptCardIcon } from "@/components/icons/VendorDetailIcons";
+import {
+  CertificateIcon,
+  CheckSmallIcon,
+  ClockIcon,
+  IdCardIcon,
+  ReceiptCardIcon,
+  RejectIcon,
+} from "@/components/icons/VendorDetailIcons";
 import { LocationIcon } from "@/components/icons/VendorIcons";
-import type { KycDocumentStatus, SellerTier, Vendor } from "@/lib/mock-data/vendors";
+import { VendorKycDocumentViewer } from "@/components/vendors/VendorKycDocumentViewer";
+import type { KycDocument, KycDocumentStatus, SellerTier, Vendor } from "@/lib/mock-data/vendors";
 
 export type VendorDetailTab = "overview" | "documents" | "performance";
 
@@ -21,10 +29,10 @@ const DOC_ICON: Record<string, (props: { className?: string }) => JSX.Element> =
   "Address Proof": LocationIcon,
 };
 
-const DOC_STATUS_BADGE: Record<KycDocumentStatus, "success" | "warning" | "danger"> = {
-  Verified: "success",
-  Pending: "warning",
-  Rejected: "danger",
+const DOC_STATUS_STYLE: Record<KycDocumentStatus, { pill: string; text: string; Icon: (props: { className?: string }) => JSX.Element }> = {
+  Verified: { pill: "bg-success-light", text: "text-success", Icon: CheckSmallIcon },
+  Pending: { pill: "bg-warning-light", text: "text-warning", Icon: ClockIcon },
+  Rejected: { pill: "bg-primary-soft", text: "text-primary", Icon: RejectIcon },
 };
 
 interface VendorOverviewTabsProps {
@@ -32,10 +40,21 @@ interface VendorOverviewTabsProps {
   sellerTier: SellerTier;
   activeTab: VendorDetailTab;
   onTabChange: (tab: VendorDetailTab) => void;
+  kycDocuments: KycDocument[];
+  onDocumentStatusChange: (documentName: string, status: KycDocumentStatus) => void;
 }
 
 /** "TABS CARD": Overview / KYC Documents / Performance switcher for the vendor's business detail. */
-export function VendorOverviewTabs({ vendor, sellerTier, activeTab, onTabChange }: VendorOverviewTabsProps) {
+export function VendorOverviewTabs({
+  vendor,
+  sellerTier,
+  activeTab,
+  onTabChange,
+  kycDocuments,
+  onDocumentStatusChange,
+}: VendorOverviewTabsProps) {
+  const [selectedDocumentName, setSelectedDocumentName] = useState(kycDocuments[0]?.name);
+  const selectedDocument = kycDocuments.find((doc) => doc.name === selectedDocumentName) ?? kycDocuments[0];
   return (
     <Card className="w-full overflow-hidden">
       <div className="flex border-b border-border px-5">
@@ -68,20 +87,54 @@ export function VendorOverviewTabs({ vendor, sellerTier, activeTab, onTabChange 
           </>
         )}
 
-        {activeTab === "documents" && (
-          <div className="flex flex-col">
-            {vendor.kycDocuments.map((doc) => {
-              const Icon = DOC_ICON[doc.name] ?? CertificateIcon;
-              return (
-                <div key={doc.name} className="flex items-center justify-between border-b border-surface-tint py-3 last:border-b-0">
-                  <div className="flex items-center gap-2.5">
-                    <Icon className="size-4 text-gray-500" />
-                    <span className="text-[13.5px] font-semibold text-ink">{doc.name}</span>
-                  </div>
-                  <Badge variant={DOC_STATUS_BADGE[doc.status]}>{doc.status}</Badge>
-                </div>
-              );
-            })}
+        {activeTab === "documents" && selectedDocument && (
+          <div className="flex flex-col items-start gap-5 lg:flex-row">
+            <div className="flex w-full min-w-0 flex-col gap-3 lg:w-[300px] lg:shrink-0">
+              <h3 className="text-[13px] font-bold uppercase tracking-[0.78px] text-ink">KYC Documents</h3>
+              {kycDocuments.map((doc) => {
+                const Icon = DOC_ICON[doc.name] ?? CertificateIcon;
+                const { pill, text, Icon: StatusIcon } = DOC_STATUS_STYLE[doc.status];
+                const isSelected = doc.name === selectedDocument.name;
+                return (
+                  <button
+                    key={doc.name}
+                    type="button"
+                    onClick={() => setSelectedDocumentName(doc.name)}
+                    className={`flex w-full flex-col gap-2.5 rounded-lg border p-[15px] text-left transition-colors ${
+                      isSelected ? "border-primary bg-primary-lighter ring-1 ring-inset ring-primary" : "border-border bg-surface-tint hover:bg-primary-lighter/40"
+                    }`}
+                  >
+                    <div className="flex min-w-0 items-start gap-2.5">
+                      <span className="flex size-[34px] shrink-0 items-center justify-center rounded-lg bg-blue-50">
+                        <Icon className="size-[18px] text-blue-600" />
+                      </span>
+                      <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+                        <span className="truncate text-[13px] font-bold text-ink">{doc.name}</span>
+                        <span className="truncate text-[11.5px] font-medium text-gray-500">
+                          Uploaded on {doc.uploadedOn ?? vendor.registeredDate}
+                        </span>
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between gap-2">
+                      <span className={`flex items-center gap-1 rounded-full px-2 py-[3px] text-[11.5px] font-bold ${pill} ${text}`}>
+                        <StatusIcon className="size-2.5" />
+                        {doc.status}
+                      </span>
+                      <span className="shrink-0 text-xs font-bold text-primary">{isSelected ? "Viewing" : "View Document"}</span>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="min-w-0 flex-1">
+              <VendorKycDocumentViewer
+                key={selectedDocument.name}
+                vendor={vendor}
+                doc={selectedDocument}
+                onStatusChange={(status) => onDocumentStatusChange(selectedDocument.name, status)}
+              />
+            </div>
           </div>
         )}
 

@@ -10,7 +10,7 @@ import {
   RejectIcon,
 } from "@/components/icons/VendorDetailIcons";
 import { LocationIcon } from "@/components/icons/VendorIcons";
-import type { KycDocument, KycDocumentStatus, Vendor } from "@/lib/mock-data/vendors";
+import type { KycDocument, KycDocumentStatus } from "@/lib/mock-data/vendors";
 
 const DOC_ICON: Record<string, (props: { className?: string }) => JSX.Element> = {
   "GST Certificate": CertificateIcon,
@@ -26,18 +26,18 @@ const STATUS_STYLE: Record<KycDocumentStatus, { pill: string; text: string; Icon
 };
 
 interface VendorKycSummaryCardProps {
-  vendor: Vendor;
+  kycDocuments: KycDocument[];
   onViewAll: () => void;
 }
 
 /** "KYC SUMMARY": compact status list of the vendor's uploaded documents, with a shortcut into the KYC Documents tab. */
-export function VendorKycSummaryCard({ vendor, onViewAll }: VendorKycSummaryCardProps) {
+export function VendorKycSummaryCard({ kycDocuments, onViewAll }: VendorKycSummaryCardProps) {
   return (
     <Card className="flex w-full flex-col gap-3.5 p-[19px]">
       <h2 className="border-b border-border pb-3 text-sm font-extrabold text-ink">KYC Summary</h2>
 
       <div className="flex flex-col">
-        {vendor.kycDocuments.map((doc: KycDocument) => {
+        {kycDocuments.map((doc: KycDocument) => {
           const DocIcon = DOC_ICON[doc.name] ?? CertificateIcon;
           const { pill, text, Icon: StatusIcon } = STATUS_STYLE[doc.status];
           return (
