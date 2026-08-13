@@ -2,6 +2,7 @@
 
 import { Card } from "@/components/ui/Card";
 import {
+  CameraIcon,
   CertificateIcon,
   CheckSmallIcon,
   ClockIcon,
@@ -17,6 +18,9 @@ const DOC_ICON: Record<string, (props: { className?: string }) => JSX.Element> =
   "PAN Card": IdCardIcon,
   "Cancelled Cheque": ReceiptCardIcon,
   "Address Proof": LocationIcon,
+  // Physical Store vendors require two additional documents (see `vendors.ts`'s `kycDocuments`).
+  "Store Photos": CameraIcon,
+  "Physical Address Proof": LocationIcon,
 };
 
 const STATUS_STYLE: Record<KycDocumentStatus, { pill: string; text: string; Icon: (props: { className?: string }) => JSX.Element }> = {

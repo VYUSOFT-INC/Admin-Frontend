@@ -7,6 +7,8 @@ import { VendorDetailHeader } from "@/components/vendors/VendorDetailHeader";
 import { VendorKycSummaryCard } from "@/components/vendors/VendorKycSummaryCard";
 import { VendorOverviewTabs, type VendorDetailTab } from "@/components/vendors/VendorOverviewTabs";
 import { VendorProfileCard } from "@/components/vendors/VendorProfileCard";
+import { VendorStoreHoursCard } from "@/components/vendors/VendorStoreHoursCard";
+import { VendorStoreLocationCard } from "@/components/vendors/VendorStoreLocationCard";
 import type { KycDocument, KycDocumentStatus, SellerTier, Vendor, VendorStatus } from "@/lib/mock-data/vendors";
 
 interface VendorDetailViewProps {
@@ -53,13 +55,19 @@ export function VendorDetailView({ vendor }: VendorDetailViewProps) {
   const tabsCard = (
     <VendorOverviewTabs
       vendor={vendor}
-      sellerTier={sellerTier}
       activeTab={activeTab}
       onTabChange={setActiveTab}
       kycDocuments={kycDocuments}
       onDocumentStatusChange={handleDocumentStatusChange}
     />
   );
+
+  // Physical Store vendors get two extra Overview-tab cards — a weekly hours schedule and a
+  // store-location/map card — built on top of the `storeHours`/`storeAddress` fields `vendors.ts`
+  // only populates for that vendor type (Figma "pickup store", node 1101:2). Online Sellers have
+  // no walk-in storefront to schedule or map, so they keep the plain "Pickup / Warehouse Address"
+  // field `VendorOverviewTabs` already renders instead.
+  const isPhysicalStoreOverview = activeTab === "overview" && vendor.type === "Physical Store" && vendor.storeHours;
 
   const actionPanel = (
     <VendorActionPanel
@@ -90,7 +98,15 @@ export function VendorDetailView({ vendor }: VendorDetailViewProps) {
         </div>
       ) : (
         <div className="flex flex-col items-start gap-5 lg:flex-row">
-          <div className="flex min-w-0 flex-1 flex-col gap-4">{tabsCard}</div>
+          <div className="flex min-w-0 flex-1 flex-col gap-4">
+            {tabsCard}
+            {isPhysicalStoreOverview && vendor.storeHours && (
+              <>
+                <VendorStoreHoursCard hours={vendor.storeHours} />
+                <VendorStoreLocationCard vendor={vendor} />
+              </>
+            )}
+          </div>
 
           <div className="flex w-full flex-col gap-4 lg:w-[372px] lg:shrink-0">
             {actionPanel}

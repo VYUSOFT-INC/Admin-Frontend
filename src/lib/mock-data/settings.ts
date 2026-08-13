@@ -102,9 +102,10 @@ export const PLATFORM_CONFIG_SETTINGS: PlatformConfigSettings = {
 /**
  * "Pickup & Store" settings (Figma "pickup store settings", node 1071:10046) — global platform
  * rules for how in-store/walk-in pickup fulfillment works everywhere (not a list of individual
- * physical stores; that's the separate, not-yet-built "Pickup Store" screen, Figma node 1101:2,
- * which will presumably manage each vendor's own pickup location(s) building on `VendorProfile`'s
- * existing `pickupAddress` field in `vendors.ts`). This screen's settings apply uniformly to every
+ * physical stores; that's the separate "Pickup Store" screen, Figma node 1101:2, which manages
+ * each Physical Store vendor's own store hours/location on the Vendor Detail screen's Overview
+ * tab — see `VendorStoreHoursCard`/`VendorStoreLocationCard` and the `storeHours`/`storeAddress`
+ * fields on `Vendor` in `vendors.ts`). This screen's settings apply uniformly to every
  * vendor's pickup-enabled store, the same "global platform rules" scope as `PlatformConfigSettings`
  * above, just scoped to pickup/walk-in fulfillment instead of orders/payments/support generally.
  */

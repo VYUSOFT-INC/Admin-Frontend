@@ -120,6 +120,31 @@ export function ReceiptCardIcon(props: IconProps) {
   );
 }
 
+/** Hand-authored (no matching glyph in the Figma export — the "Store Photos" KYC card in the
+ *  design is plain text with no leaf icon) to extend this file's existing per-document-type icon
+ *  convention (`DOC_ICON` in `VendorOverviewTabs`/`VendorKycSummaryCard`) to the new "Store
+ *  Photos" document type physical-store vendors require. */
+export function CameraIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 14 12" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path
+        d="M4.5 1.5L3.6 3H1.75C1.1 3 0.583 3.52 0.583 4.17V10.17C0.583 10.82 1.1 11.33 1.75 11.33H12.25C12.9 11.33 13.42 10.82 13.42 10.17V4.17C13.42 3.52 12.9 3 12.25 3H10.4L9.5 1.5H4.5Z"
+        stroke="currentColor"
+        strokeWidth="1.1"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M7 8.8C8.2 8.8 9.17 7.84 9.17 6.67C9.17 5.49 8.2 4.53 7 4.53C5.8 4.53 4.83 5.49 4.83 6.67C4.83 7.84 5.8 8.8 7 8.8Z"
+        stroke="currentColor"
+        strokeWidth="1.1"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export function ClockIcon(props: IconProps) {
   return (
     <svg viewBox="0 0 10.0833 10.0833" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>

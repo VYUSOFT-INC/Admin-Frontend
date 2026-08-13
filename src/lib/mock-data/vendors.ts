@@ -13,6 +13,31 @@ export interface KycDocument {
   uploadedOn?: string;
 }
 
+/** One row of the "Store Hours" weekly schedule (Vendor Detail Overview tab, Physical Store
+ *  vendors only — Figma "pickup store", node 1101:2). */
+export interface StoreHoursEntry {
+  day: string;
+  isOpen: boolean;
+  /** Display strings (e.g. "10:00 AM") rather than a parsed time — this is a read-only/locally
+   *  editable mock schedule with no backend, matching this file's other display-string fields. */
+  openTime: string;
+  closeTime: string;
+}
+
+/** Vendor performance metrics shown on the Vendor Detail screen's Performance tab. Every vendor
+ *  gets the first four; `pickupFulfillmentRate` and `walkInCount` only apply to Physical Store
+ *  vendors (in-store pickup / walk-in discovery aren't concepts an Online Seller has). */
+export interface VendorPerformanceMetrics {
+  fulfillmentRate: string;
+  returnRate: string;
+  avgRating: string;
+  totalOrders: string;
+  /** Physical Store only. */
+  pickupFulfillmentRate?: string;
+  /** Physical Store only. */
+  walkInCount?: string;
+}
+
 export interface Vendor {
   slug: string;
   name: string;
@@ -36,6 +61,17 @@ export interface Vendor {
   pickupAddress: string;
   businessDescription: string;
   kycDocuments: KycDocument[];
+  performance: VendorPerformanceMetrics;
+  /** Fields below back the Overview tab's "Store Hours" and "Store Location" cards — Physical
+   *  Store vendors only (Figma "pickup store", node 1101:2). Undefined for Online Sellers, who
+   *  have no walk-in storefront to schedule or map; those vendors keep showing `pickupAddress`
+   *  as a plain "Pickup / Warehouse Address" field instead (see `VendorOverviewTabs`). */
+  storeHours?: StoreHoursEntry[];
+  /** Full customer-facing store address (distinct from `pickupAddress`, which is the
+   *  registered/warehouse address used in KYC document previews) — shown in the Store Location
+   *  card. */
+  storeAddress?: string;
+  directionsLandmark?: string;
 }
 
 export const VENDORS: Vendor[] = [
@@ -66,6 +102,7 @@ export const VENDORS: Vendor[] = [
       { name: "Cancelled Cheque", status: "Pending", uploadedOn: "15 June 2025" },
       { name: "Address Proof", status: "Pending", uploadedOn: "15 June 2025" },
     ],
+    performance: { fulfillmentRate: "N/A", returnRate: "N/A", avgRating: "N/A", totalOrders: "0" },
   },
   {
     slug: "green-loom-studio",
@@ -94,6 +131,7 @@ export const VENDORS: Vendor[] = [
       { name: "Cancelled Cheque", status: "Pending", uploadedOn: "12 June 2025" },
       { name: "Address Proof", status: "Verified", uploadedOn: "12 June 2025" },
     ],
+    performance: { fulfillmentRate: "N/A", returnRate: "N/A", avgRating: "N/A", totalOrders: "0" },
   },
   {
     slug: "velora-styles",
@@ -122,6 +160,7 @@ export const VENDORS: Vendor[] = [
       { name: "Cancelled Cheque", status: "Verified", uploadedOn: "3 March 2025" },
       { name: "Address Proof", status: "Verified", uploadedOn: "3 March 2025" },
     ],
+    performance: { fulfillmentRate: "96.4%", returnRate: "3.1%", avgRating: "4.6", totalOrders: "2,150" },
   },
   {
     slug: "north-square-atelier",
@@ -149,6 +188,27 @@ export const VENDORS: Vendor[] = [
       { name: "PAN Card", status: "Verified", uploadedOn: "18 January 2025" },
       { name: "Cancelled Cheque", status: "Verified", uploadedOn: "19 January 2025" },
       { name: "Address Proof", status: "Pending", uploadedOn: "19 January 2025" },
+      { name: "Store Photos", status: "Verified", uploadedOn: "19 January 2025" },
+      { name: "Physical Address Proof", status: "Pending", uploadedOn: "19 January 2025" },
+    ],
+    performance: {
+      fulfillmentRate: "94.7%",
+      returnRate: "3.4%",
+      avgRating: "4.5",
+      totalOrders: "612",
+      pickupFulfillmentRate: "95.8%",
+      walkInCount: "184",
+    },
+    storeAddress: "North Square Atelier, 14 Connaught Place, New Delhi – 110001, Delhi",
+    directionsLandmark: "Opposite Connaught Place Metro Gate 5",
+    storeHours: [
+      { day: "Monday", isOpen: true, openTime: "10:00 AM", closeTime: "8:00 PM" },
+      { day: "Tuesday", isOpen: true, openTime: "10:00 AM", closeTime: "8:00 PM" },
+      { day: "Wednesday", isOpen: true, openTime: "10:00 AM", closeTime: "8:00 PM" },
+      { day: "Thursday", isOpen: true, openTime: "10:00 AM", closeTime: "8:00 PM" },
+      { day: "Friday", isOpen: true, openTime: "10:00 AM", closeTime: "8:00 PM" },
+      { day: "Saturday", isOpen: true, openTime: "10:00 AM", closeTime: "8:00 PM" },
+      { day: "Sunday", isOpen: false, openTime: "10:00 AM", closeTime: "6:00 PM" },
     ],
   },
   {
@@ -178,6 +238,7 @@ export const VENDORS: Vendor[] = [
       { name: "Cancelled Cheque", status: "Rejected", uploadedOn: "30 October 2024" },
       { name: "Address Proof", status: "Verified", uploadedOn: "30 October 2024" },
     ],
+    performance: { fulfillmentRate: "81.2%", returnRate: "9.8%", avgRating: "3.4", totalOrders: "540" },
   },
   {
     slug: "harbor-blend-collective",
@@ -201,10 +262,31 @@ export const VENDORS: Vendor[] = [
     businessDescription:
       "Harbor Blend Collective is a lifestyle concept store blending home decor, apparel, and wellness products across its Kochi outlet.",
     kycDocuments: [
-      { name: "GST Certificate", status: "Verified", uploadedOn: "7 February 2025" },
-      { name: "PAN Card", status: "Verified", uploadedOn: "7 February 2025" },
-      { name: "Cancelled Cheque", status: "Verified", uploadedOn: "8 February 2025" },
-      { name: "Address Proof", status: "Verified", uploadedOn: "8 February 2025" },
+      { name: "GST Certificate", status: "Verified", uploadedOn: "10 February 2025" },
+      { name: "PAN Card", status: "Verified", uploadedOn: "10 February 2025" },
+      { name: "Cancelled Cheque", status: "Pending", uploadedOn: "11 February 2025" },
+      { name: "Address Proof", status: "Verified", uploadedOn: "10 February 2025" },
+      { name: "Store Photos", status: "Verified", uploadedOn: "12 February 2025" },
+      { name: "Physical Address Proof", status: "Pending", uploadedOn: "12 February 2025" },
+    ],
+    performance: {
+      fulfillmentRate: "97.8%",
+      returnRate: "2.1%",
+      avgRating: "4.8",
+      totalOrders: "1,284",
+      pickupFulfillmentRate: "98.9%",
+      walkInCount: "342",
+    },
+    storeAddress: "Harbor Blend Collective, 14 Princess Street, Fort Kochi, Kochi, Kerala 682001",
+    directionsLandmark: "Near XYZ landmark",
+    storeHours: [
+      { day: "Monday", isOpen: true, openTime: "10:00 AM", closeTime: "9:00 PM" },
+      { day: "Tuesday", isOpen: true, openTime: "10:00 AM", closeTime: "9:00 PM" },
+      { day: "Wednesday", isOpen: true, openTime: "10:00 AM", closeTime: "9:00 PM" },
+      { day: "Thursday", isOpen: true, openTime: "10:00 AM", closeTime: "9:00 PM" },
+      { day: "Friday", isOpen: true, openTime: "10:00 AM", closeTime: "9:00 PM" },
+      { day: "Saturday", isOpen: true, openTime: "10:00 AM", closeTime: "9:00 PM" },
+      { day: "Sunday", isOpen: true, openTime: "11:00 AM", closeTime: "7:00 PM" },
     ],
   },
   {
@@ -233,6 +315,27 @@ export const VENDORS: Vendor[] = [
       { name: "PAN Card", status: "Pending", uploadedOn: "20 June 2025" },
       { name: "Cancelled Cheque", status: "Pending", uploadedOn: "21 June 2025" },
       { name: "Address Proof", status: "Pending", uploadedOn: "21 June 2025" },
+      { name: "Store Photos", status: "Pending", uploadedOn: "21 June 2025" },
+      { name: "Physical Address Proof", status: "Pending", uploadedOn: "21 June 2025" },
+    ],
+    performance: {
+      fulfillmentRate: "N/A",
+      returnRate: "N/A",
+      avgRating: "N/A",
+      totalOrders: "0",
+      pickupFulfillmentRate: "N/A",
+      walkInCount: "0",
+    },
+    storeAddress: "Maple Wear Co., Shed 3, Naroda Industrial Estate, Ahmedabad – 382330, Gujarat",
+    directionsLandmark: "Near Naroda GIDC Circle",
+    storeHours: [
+      { day: "Monday", isOpen: true, openTime: "10:00 AM", closeTime: "7:00 PM" },
+      { day: "Tuesday", isOpen: true, openTime: "10:00 AM", closeTime: "7:00 PM" },
+      { day: "Wednesday", isOpen: true, openTime: "10:00 AM", closeTime: "7:00 PM" },
+      { day: "Thursday", isOpen: true, openTime: "10:00 AM", closeTime: "7:00 PM" },
+      { day: "Friday", isOpen: true, openTime: "10:00 AM", closeTime: "7:00 PM" },
+      { day: "Saturday", isOpen: true, openTime: "10:00 AM", closeTime: "7:00 PM" },
+      { day: "Sunday", isOpen: false, openTime: "10:00 AM", closeTime: "7:00 PM" },
     ],
   },
   {
@@ -262,6 +365,7 @@ export const VENDORS: Vendor[] = [
       { name: "Cancelled Cheque", status: "Rejected", uploadedOn: "4 May 2025" },
       { name: "Address Proof", status: "Rejected", uploadedOn: "4 May 2025" },
     ],
+    performance: { fulfillmentRate: "N/A", returnRate: "N/A", avgRating: "N/A", totalOrders: "0" },
   },
   {
     slug: "aurel-lane",
@@ -290,6 +394,7 @@ export const VENDORS: Vendor[] = [
       { name: "Cancelled Cheque", status: "Verified", uploadedOn: "16 November 2024" },
       { name: "Address Proof", status: "Verified", uploadedOn: "16 November 2024" },
     ],
+    performance: { fulfillmentRate: "98.1%", returnRate: "1.8%", avgRating: "4.9", totalOrders: "3,402" },
   },
   {
     slug: "moss-and-clay",
@@ -317,6 +422,27 @@ export const VENDORS: Vendor[] = [
       { name: "PAN Card", status: "Verified", uploadedOn: "8 September 2024" },
       { name: "Cancelled Cheque", status: "Verified", uploadedOn: "9 September 2024" },
       { name: "Address Proof", status: "Rejected", uploadedOn: "9 September 2024" },
+      { name: "Store Photos", status: "Verified", uploadedOn: "9 September 2024" },
+      { name: "Physical Address Proof", status: "Rejected", uploadedOn: "9 September 2024" },
+    ],
+    performance: {
+      fulfillmentRate: "88.3%",
+      returnRate: "11.6%",
+      avgRating: "3.9",
+      totalOrders: "402",
+      pickupFulfillmentRate: "90.2%",
+      walkInCount: "97",
+    },
+    storeAddress: "Moss & Clay, 45 Park Street, Kolkata – 700016, West Bengal",
+    directionsLandmark: "Near Park Street Metro Station",
+    storeHours: [
+      { day: "Monday", isOpen: true, openTime: "11:00 AM", closeTime: "7:00 PM" },
+      { day: "Tuesday", isOpen: true, openTime: "11:00 AM", closeTime: "7:00 PM" },
+      { day: "Wednesday", isOpen: true, openTime: "11:00 AM", closeTime: "7:00 PM" },
+      { day: "Thursday", isOpen: true, openTime: "11:00 AM", closeTime: "7:00 PM" },
+      { day: "Friday", isOpen: true, openTime: "11:00 AM", closeTime: "7:00 PM" },
+      { day: "Saturday", isOpen: true, openTime: "11:00 AM", closeTime: "7:00 PM" },
+      { day: "Sunday", isOpen: false, openTime: "11:00 AM", closeTime: "7:00 PM" },
     ],
   },
 ];

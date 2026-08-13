@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Card } from "@/components/ui/Card";
 import {
+  CameraIcon,
   CertificateIcon,
   CheckSmallIcon,
   ClockIcon,
@@ -12,7 +13,7 @@ import {
 } from "@/components/icons/VendorDetailIcons";
 import { LocationIcon } from "@/components/icons/VendorIcons";
 import { VendorKycDocumentViewer } from "@/components/vendors/VendorKycDocumentViewer";
-import type { KycDocument, KycDocumentStatus, SellerTier, Vendor } from "@/lib/mock-data/vendors";
+import type { KycDocument, KycDocumentStatus, Vendor } from "@/lib/mock-data/vendors";
 
 export type VendorDetailTab = "overview" | "documents" | "performance";
 
@@ -27,6 +28,9 @@ const DOC_ICON: Record<string, (props: { className?: string }) => JSX.Element> =
   "PAN Card": IdCardIcon,
   "Cancelled Cheque": ReceiptCardIcon,
   "Address Proof": LocationIcon,
+  // Physical Store vendors require two additional documents (see `vendors.ts`'s `kycDocuments`).
+  "Store Photos": CameraIcon,
+  "Physical Address Proof": LocationIcon,
 };
 
 const DOC_STATUS_STYLE: Record<KycDocumentStatus, { pill: string; text: string; Icon: (props: { className?: string }) => JSX.Element }> = {
@@ -37,7 +41,6 @@ const DOC_STATUS_STYLE: Record<KycDocumentStatus, { pill: string; text: string; 
 
 interface VendorOverviewTabsProps {
   vendor: Vendor;
-  sellerTier: SellerTier;
   activeTab: VendorDetailTab;
   onTabChange: (tab: VendorDetailTab) => void;
   kycDocuments: KycDocument[];
@@ -47,7 +50,6 @@ interface VendorOverviewTabsProps {
 /** "TABS CARD": Overview / KYC Documents / Performance switcher for the vendor's business detail. */
 export function VendorOverviewTabs({
   vendor,
-  sellerTier,
   activeTab,
   onTabChange,
   kycDocuments,
@@ -82,7 +84,12 @@ export function VendorOverviewTabs({
               <ReadOnlyField label="Bank Account" value={vendor.bankAccountMasked} />
               <ReadOnlyField label="IFSC Code" value={vendor.ifscCode} />
             </div>
-            <ReadOnlyField label="Pickup / Warehouse Address" value={vendor.pickupAddress} />
+            {/* Physical Store vendors get a full "Store Location" card (map + address +
+                directions/landmarks) further down the Overview tab instead of this plain field —
+                see `VendorStoreLocationCard`, rendered by `VendorDetailView`. */}
+            {vendor.type !== "Physical Store" && (
+              <ReadOnlyField label="Pickup / Warehouse Address" value={vendor.pickupAddress} />
+            )}
             <ReadOnlyField label="Business Description" value={vendor.businessDescription} />
           </>
         )}
@@ -139,10 +146,19 @@ export function VendorOverviewTabs({
         )}
 
         {activeTab === "performance" && (
-          <div className="grid grid-cols-3 gap-4">
-            <PerformanceStat label="Products Listed" value={String(vendor.productsListed)} />
-            <PerformanceStat label="Seller Tier" value={sellerTier} />
-            <PerformanceStat label="Registered" value={vendor.registeredDate} />
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
+            <PerformanceStat label="Fulfillment Rate" value={vendor.performance.fulfillmentRate} />
+            <PerformanceStat label="Return Rate" value={vendor.performance.returnRate} />
+            <PerformanceStat label="Avg Rating" value={vendor.performance.avgRating} />
+            <PerformanceStat label="Total Orders" value={vendor.performance.totalOrders} />
+            {/* Pickup fulfillment / walk-in count only apply to Physical Store vendors — see
+                `VendorPerformanceMetrics` in `vendors.ts`. */}
+            {vendor.performance.pickupFulfillmentRate && (
+              <PerformanceStat label="Pickup Fulfillment Rate" value={vendor.performance.pickupFulfillmentRate} />
+            )}
+            {vendor.performance.walkInCount && (
+              <PerformanceStat label="Walk-in Count" value={vendor.performance.walkInCount} />
+            )}
           </div>
         )}
       </div>

@@ -98,6 +98,32 @@ export function getKycDocumentPreview(vendor: Vendor, documentName: string): Kyc
         disclaimer:
           "This preview represents the uploaded KYC file for admin verification. Verify the address matches the vendor's pickup/warehouse location.",
       };
+    case "Store Photos":
+      return {
+        badgeLabel: "STORE PHOTOS",
+        title: "Physical Store Photographs",
+        fields: [
+          { label: "Store Name", value: vendor.name },
+          { label: "Photo Set", value: "Exterior + Interior thumbnails" },
+          { label: "Location", value: vendor.location },
+          { label: "Captured For", value: "Store readiness verification" },
+        ],
+        disclaimer:
+          "This preview represents the uploaded KYC file for admin verification. Verify the storefront matches the registered address before approving pickup readiness.",
+      };
+    case "Physical Address Proof":
+      return {
+        badgeLabel: "STORE ADDRESS",
+        title: "Physical Store Address Proof",
+        fields: [
+          { label: "Name on Document", value: vendor.ownerName },
+          { label: "Store Address", value: vendor.storeAddress ?? vendor.pickupAddress },
+          { label: "Proof Type", value: "Rental Agreement" },
+          { label: "Issuing Authority", value: "Local Municipal Authority" },
+        ],
+        disclaimer:
+          "This preview represents the uploaded KYC file for admin verification. Verify the address matches the store location shown on the Overview tab.",
+      };
     default:
       return {
         badgeLabel: "DOCUMENT",
