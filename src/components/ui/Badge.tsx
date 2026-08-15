@@ -1,6 +1,15 @@
 import type { ReactNode } from "react";
 
-export type BadgeVariant = "danger" | "success" | "warning" | "neutral" | "muted" | "info" | "purple" | "sky";
+export type BadgeVariant =
+  | "danger"
+  | "success"
+  | "warning"
+  | "neutral"
+  | "muted"
+  | "info"
+  | "purple"
+  | "sky"
+  | "vendorTag";
 
 const VARIANT_CLASSES: Record<BadgeVariant, string> = {
   danger: "bg-primary-soft text-primary",
@@ -15,6 +24,10 @@ const VARIANT_CLASSES: Record<BadgeVariant, string> = {
   /** Sky blue — distinct from `info`'s deeper blue; used for the Promotions Coupons table's
    * "Fixed" discount type so it doesn't read the same as that row's "Delivery" applies-to tag. */
   sky: "bg-[#e7f6fd] text-[#0ea5e9]",
+  /** Pale pink — Analytics "Top Vendors This Month" card's channel tag (Figma node 1143:410),
+   * where "Online Seller"/"Physical Store" render identically instead of the red/green split
+   * `danger`/`success` get elsewhere (e.g. Dashboard's Pending Vendor Approvals card). */
+  vendorTag: "bg-[#fff3f5] text-ink",
 };
 
 export interface BadgeProps {

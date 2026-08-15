@@ -91,6 +91,16 @@ export function SupportIcon(props: IconProps) {
   );
 }
 
+export function AnalyticsIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path d="M0.75 0.75V12.75C0.75 13.5779 1.42213 14.25 2.25 14.25H14.25" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M10.5 2.25H12C12.4139 2.25 12.75 2.58606 12.75 3V10.5C12.75 10.9139 12.4139 11.25 12 11.25H10.5C10.0861 11.25 9.75 10.9139 9.75 10.5V3C9.75 2.58606 10.0861 2.25 10.5 2.25V2.25" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M4.5 4.5H6C6.41394 4.5 6.75 4.83606 6.75 5.25V10.5C6.75 10.9139 6.41394 11.25 6 11.25H4.5C4.08606 11.25 3.75 10.9139 3.75 10.5V5.25C3.75 4.83606 4.08606 4.5 4.5 4.5V4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 export function SettingsIcon(props: IconProps) {
   return (
     <svg viewBox="0 0 14.935 16.4731" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>

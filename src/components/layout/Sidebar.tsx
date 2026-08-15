@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ComponentType, SVGProps } from "react";
 import {
+  AnalyticsIcon,
   CustomersIcon,
   DashboardIcon,
   OrdersIcon,
@@ -29,6 +30,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Orders", href: "/orders", icon: OrdersIcon },
   { label: "Returns", href: "/returns", icon: ReturnsIcon },
   { label: "Payments", href: "/payments", icon: PaymentsIcon },
+  { label: "Analytics", href: "/analytics", icon: AnalyticsIcon },
   { label: "Promotions", href: "/promotions", icon: PromotionsIcon },
   { label: "Customers", href: "/customers", icon: CustomersIcon },
   { label: "Support", href: "/support", icon: SupportIcon },

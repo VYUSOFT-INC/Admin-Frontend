@@ -5,6 +5,9 @@ import type { ReactNode } from "react";
 import { ChevronDownIcon } from "@/components/icons/ProductIcons";
 
 interface ProductFilterDropdownProps<T extends string> {
+  /** Set to "" to omit the "Label: " prefix and render just the selected value — e.g. the
+   *  Reviews Moderation screen's "Product" filter, which the Figma design renders as a bare
+   *  "All Products" with no leading label (unlike "Rating: All" / "Status: All" alongside it). */
   label: string;
   value: T | "All";
   allLabel: string;
@@ -12,6 +15,10 @@ interface ProductFilterDropdownProps<T extends string> {
   onChange: (value: T | "All") => void;
   /** Optional leading icon rendered before the label, e.g. Returns' Date Range/Vendor/Reason filters. */
   icon?: ReactNode;
+  /** Stretches the trigger to fill its container instead of sizing to content — used when this
+   *  dropdown sits inside a grid cell (e.g. the Reviews Moderation filters card) rather than a
+   *  free-flowing `flex-wrap` row. */
+  fullWidth?: boolean;
 }
 
 /** "Label: Value ▾" filter control used for Category/Vendor/Fulfillment on the Products screen. */
@@ -22,6 +29,7 @@ export function ProductFilterDropdown<T extends string>({
   options,
   onChange,
   icon,
+  fullWidth = false,
 }: ProductFilterDropdownProps<T>) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -37,20 +45,22 @@ export function ProductFilterDropdown<T extends string>({
   }, []);
 
   return (
-    <div className="relative shrink-0" ref={containerRef}>
+    <div className={`relative ${fullWidth ? "w-full" : "shrink-0"}`} ref={containerRef}>
       <button
         type="button"
         onClick={() => setIsOpen((open) => !open)}
         aria-expanded={isOpen}
         aria-haspopup="menu"
         className={`flex h-9 items-center gap-2 rounded-lg border bg-white px-3.5 text-[13px] transition-colors ${
-          value !== "All" ? "border-primary text-primary" : "border-border text-ink hover:bg-surface-tint"
-        }`}
+          fullWidth ? "w-full justify-between" : ""
+        } ${value !== "All" ? "border-primary text-primary" : "border-border text-ink hover:bg-surface-tint"}`}
       >
-        {icon}
-        <span className="font-medium text-gray-500">{label}:</span>
-        <span className="font-semibold">{value === "All" ? allLabel : value}</span>
-        <ChevronDownIcon className="size-3 text-gray-400" />
+        <span className={`flex items-center gap-2 ${fullWidth ? "min-w-0" : ""}`}>
+          {icon}
+          {label && <span className="font-medium text-gray-500">{label}:</span>}
+          <span className="truncate font-semibold">{value === "All" ? allLabel : value}</span>
+        </span>
+        <ChevronDownIcon className="size-3 shrink-0 text-gray-400" />
       </button>
 
       {isOpen && (
