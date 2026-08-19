@@ -1,8 +1,9 @@
 /**
  * Mock data for the Settings section. "Commission Rates" (Figma node 1071:8652), "Payout
- * Schedule" (node 1071:8929), "Category Management" (node 1071:9230), and "Platform Config"
- * (node 1071:9795), and "Pickup & Store" (node 1071:10046) are all built — every `SETTINGS_SUB_NAV`
- * destination now links somewhere real.
+ * Schedule" (node 1071:8929), "Category Management" (node 1071:9230), "Platform Config"
+ * (node 1071:9795), "Shipping" (node 1143:1675), "Tax & Compliance" (node 1143:2483), and
+ * "Pickup & Store" (node 1071:10046) are all built — every `SETTINGS_SUB_NAV` destination now
+ * links somewhere real.
  *
  * Standalone-mock note: these category commission rates are a *forward-looking configuration*
  * an admin edits here — matching the Figma copy "Changes apply to future settlements." They are
@@ -41,17 +42,21 @@ export interface SettingsSubNavItem {
   label: string;
   /** Route slug under `/settings/`, e.g. "commission" → `/settings/commission`. */
   slug: string;
-  /** All five sections now have a built screen, so this is always `true` — kept as a flag (rather
+  /** All seven sections now have a built screen, so this is always `true` — kept as a flag (rather
    * than deleted) since `SettingsSubNav.tsx`'s Link/"Soon"-badge branching reads off it, and a
-   * future sixth sub-nav destination would drop in the same way "Pickup & Store" did. */
+   * future eighth sub-nav destination would drop in the same way "Tax & Compliance" did. */
   isAvailable: boolean;
 }
 
+/** Order matches the Figma "tax and compliance" screen's own sub-nav screenshot exactly:
+ * "Tax & Compliance" sits between "Shipping" and "Pickup & Store". */
 export const SETTINGS_SUB_NAV: SettingsSubNavItem[] = [
   { label: "Commission Rates", slug: "commission", isAvailable: true },
   { label: "Payout Schedule", slug: "payout-schedule", isAvailable: true },
   { label: "Category Management", slug: "category-management", isAvailable: true },
   { label: "Platform Config", slug: "platform-config", isAvailable: true },
+  { label: "Shipping", slug: "shipping", isAvailable: true },
+  { label: "Tax & Compliance", slug: "tax-compliance", isAvailable: true },
   { label: "Pickup & Store", slug: "pickup-store", isAvailable: true },
 ];
 

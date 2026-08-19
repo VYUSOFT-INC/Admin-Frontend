@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ComponentType, SVGProps } from "react";
 import { Badge } from "@/components/ui/Badge";
-import { LayersIcon, PayoutScheduleIcon, PercentIcon, PinIcon, SlidersIcon } from "@/components/icons/SettingsIcons";
+import { LayersIcon, PayoutScheduleIcon, PercentIcon, PinIcon, SlidersIcon, TaxComplianceIcon, TruckIcon } from "@/components/icons/SettingsIcons";
 import { SETTINGS_SUB_NAV } from "@/lib/mock-data/settings";
 
 const ICONS: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = {
@@ -9,6 +9,8 @@ const ICONS: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = {
   "payout-schedule": PayoutScheduleIcon,
   "category-management": LayersIcon,
   "platform-config": SlidersIcon,
+  shipping: TruckIcon,
+  "tax-compliance": TaxComplianceIcon,
   "pickup-store": PinIcon,
 };
 
@@ -19,11 +21,11 @@ interface SettingsSubNavProps {
 
 /**
  * Left-hand sub-navigation on every Settings screen (Figma "settings - commision rates",
- * node 1071:8766). All five destinations — "Commission Rates", "Payout Schedule", "Category
- * Management", "Platform Config", and "Pickup & Store" — link somewhere real now (see
- * `SETTINGS_SUB_NAV`). The non-interactive "Soon"-badge branch below is kept so a future sixth
- * sub-nav destination can drop in the same way each of these did, without ever linking to a route
- * that doesn't exist yet.
+ * node 1071:8766). All seven destinations — "Commission Rates", "Payout Schedule", "Category
+ * Management", "Platform Config", "Shipping", "Tax & Compliance", and "Pickup & Store" — link
+ * somewhere real now (see `SETTINGS_SUB_NAV`). The non-interactive "Soon"-badge branch below is
+ * kept so a future eighth sub-nav destination can drop in the same way each of these did, without
+ * ever linking to a route that doesn't exist yet.
  */
 export function SettingsSubNav({ active }: SettingsSubNavProps) {
   return (

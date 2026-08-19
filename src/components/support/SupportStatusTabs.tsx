@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { TicketStatus } from "@/lib/mock-data/support";
 
 interface SupportStatusTabsProps {
@@ -14,6 +15,11 @@ interface SupportStatusTabsProps {
  * *light*-chip treatment. Inactive tabs are bordered white pills with a neutral count badge,
  * reusing the same `bg-surface-tint`/`text-gray-500` pairing `PayoutStatusTabs`/`ReturnStatusTabs`
  * already use for their own inactive counts.
+ *
+ * The trailing "Disputes" pill is a real link to the Dispute Management sub-view
+ * (`/support/disputes`, Figma node 1143:3371) rather than a local-state tab, since that screen
+ * has its own stat cards/filters/queue table and isn't just another ticket status filter — the
+ * same reasoning `ProductStatusTabs` documents for its own trailing "Inventory"/"Reviews" links.
  */
 export function SupportStatusTabs({ tabs, active, onChange, counts }: SupportStatusTabsProps) {
   return (
@@ -41,6 +47,12 @@ export function SupportStatusTabs({ tabs, active, onChange, counts }: SupportSta
           </button>
         );
       })}
+      <Link
+        href="/support/disputes"
+        className="flex h-[34px] items-center rounded-[10px] border border-border bg-white px-3.5 text-xs font-semibold text-gray-500 transition-colors hover:bg-surface-tint"
+      >
+        Disputes
+      </Link>
     </div>
   );
 }

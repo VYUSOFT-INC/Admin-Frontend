@@ -26,6 +26,22 @@ import type { SVGProps } from "react";
  * "Parent Category" select chevron reuses `ChevronDownIcon` again; and its "Save" button
  * checkmark reuses `CheckSmallIcon` from `VendorDetailIcons.tsx`. Only `SubcategoryArrowIcon`
  * below (the "↳" glyph marking a sub-category row) is a genuinely new export for that screen.
+ *
+ * The Tax & Compliance panel (node 1143:2483) again verified every icon against existing exports
+ * first: "Preview Invoice Template" reuses `IdCardIcon` from `VendorDetailIcons.tsx` (the Figma
+ * export's path data is pixel-identical to that icon, despite the button's own label suggesting an
+ * eye/preview glyph — verified by diffing the exported SVG's path coordinates, not just eyeballing
+ * the render); the Compliance Documents table's "PAN Card" row reuses `ReceiptCardIcon` from
+ * `VendorDetailIcons.tsx` (identical path geometry scaled ~1.29x, the same kind of rescaled reuse
+ * `PinIcon` above documents); "Download All Documents" reuses `ExportIcon` from `VendorIcons.tsx`
+ * (pixel-identical); and its select chevron reuses `ChevronDownIcon` from `VendorDetailIcons.tsx`
+ * again. `GstCertificateIcon` and `CompanyCertificateIcon` below are new exports for that screen's
+ * "Platform GST Certificate" / "Company Registration Certificate" table rows — neither shape
+ * matches anything already declared. `TaxComplianceIcon` (this file's sub-nav icon for the new
+ * "Tax & Compliance" entry) is hand-authored: like `TruckIcon` above, the Figma sub-nav's own row
+ * has no icon layer for any of its seven entries (verified against a fresh screenshot), so a new
+ * icon was added in the same stroke style as its six siblings rather than leaving one shared-nav
+ * entry bare.
  */
 type IconProps = SVGProps<SVGSVGElement>;
 
@@ -107,6 +123,50 @@ export function SlidersIcon(props: IconProps) {
   );
 }
 
+/** "Shipping" sub-nav icon — a delivery-truck glyph. Hand-authored: unlike every other icon on
+ * this screen (all of which turned out to be pixel-identical exports already declared elsewhere,
+ * see the file-level comment above), the Figma "shipping" node's sub-nav row has no icon layer at
+ * all for *any* of its six entries — verified against both a fresh screenshot and `get_metadata`,
+ * not just the one row. Since `SettingsSubNav.tsx` is the one shared component every Settings
+ * screen renders through, and its other five, already-shipped entries all render with an icon,
+ * dropping icons platform-wide (or leaving only "Shipping" bare) would read as broken/inconsistent
+ * rather than matching this one screen's apparent one-off omission — so a new icon was added here
+ * instead, in the same stroke-based style as its siblings. */
+export function TruckIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 15 12.5" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path
+        d="M0.625 1.875C0.625 1.52505 0.905051 1.25 1.25 1.25H8.125C8.47495 1.25 8.75 1.52505 8.75 1.875V9.375H0.625V1.875Z"
+        stroke="currentColor"
+        strokeWidth="1.15"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M8.75 4.375H11.6797C11.9013 4.375 12.1064 4.49216 12.2192 4.68306L13.9145 7.55495C13.971 7.65083 14.0008 7.76013 14.0008 7.87148V9.375H8.75"
+        stroke="currentColor"
+        strokeWidth="1.15"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M3.4375 11.875C4.16688 11.875 4.75 11.2925 4.75 10.5625C4.75 9.83249 4.16688 9.25 3.4375 9.25C2.70812 9.25 2.125 9.83249 2.125 10.5625C2.125 11.2925 2.70812 11.875 3.4375 11.875Z"
+        stroke="currentColor"
+        strokeWidth="1.15"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M11.0625 11.875C11.7919 11.875 12.375 11.2925 12.375 10.5625C12.375 9.83249 11.7919 9.25 11.0625 9.25C10.3331 9.25 9.75 9.83249 9.75 10.5625C9.75 11.2925 10.3331 11.875 11.0625 11.875Z"
+        stroke="currentColor"
+        strokeWidth="1.15"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 /** "Pickup & Store" sub-nav icon — the same pin-drop glyph as `public/assets/icons/vendors/location.svg`
  * scaled up (identical path geometry at 1.25x), reused rather than redeclared. */
 export function PinIcon(props: IconProps) {
@@ -181,6 +241,77 @@ export function RupeeIcon(props: IconProps) {
         d="M3.5 1.75H10.5M3.5 4.66667H10.5M3.5 7.58333L8.45833 12.25M3.5 7.58333H5.25M5.25 7.58333C9.13908 7.58333 9.13908 1.75 5.25 1.75"
         stroke="currentColor"
         strokeWidth="1.16667"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/** "Tax & Compliance" sub-nav icon — a clipboard-with-checkmark glyph. Hand-authored; see the
+ * file-level comment above for why (Figma's sub-nav row has no icon layer for any entry). */
+export function TaxComplianceIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 12.5 13.75" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path
+        d="M4.375 1.875H2.5C1.81 1.875 1.25 2.435 1.25 3.125V11.875C1.25 12.565 1.81 13.125 2.5 13.125H10C10.69 13.125 11.25 12.565 11.25 11.875V3.125C11.25 2.435 10.69 1.875 10 1.875H8.125"
+        stroke="currentColor"
+        strokeWidth="1.25"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M4.6875 0.625H7.8125C8.1577 0.625 8.4375 0.904822 8.4375 1.25V2.1875C8.4375 2.53268 8.1577 2.8125 7.8125 2.8125H4.6875C4.34232 2.8125 4.0625 2.53268 4.0625 2.1875V1.25C4.0625 0.904822 4.34232 0.625 4.6875 0.625V0.625Z"
+        stroke="currentColor"
+        strokeWidth="1.25"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path d="M3.75 7.5L5.3125 9.0625L8.75 5.625" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+/** Compliance Documents table's "Platform GST Certificate" row icon — a ticket/certificate glyph
+ * with a scalloped bottom edge, matching the Figma export exactly (node 1143:2786). Distinct from
+ * `ReceiptCardIcon`'s plain rectangle and `IdCardIcon`'s folded-corner card, so kept as a new export. */
+export function GstCertificateIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path
+        d="M9.75 12H6M10.5 6H6M12 9H6M3 2.25C3 1.83606 3.33606 1.5 3.75 1.5C3.93571 1.49898 4.11786 1.55102 4.275 1.65L4.97475 2.1C5.29486 2.30455 5.70464 2.30455 6.02475 2.1L6.72525 1.65C7.04536 1.44545 7.45514 1.44545 7.77525 1.65L8.475 2.1C8.79511 2.30455 9.20489 2.30455 9.525 2.1L10.2248 1.65C10.5449 1.44545 10.9546 1.44545 11.2747 1.65L11.9753 2.1C12.2954 2.30455 12.7051 2.30455 13.0253 2.1L13.725 1.65C13.8821 1.55102 14.0643 1.49898 14.25 1.5C14.6639 1.5 15 1.83606 15 2.25V15.75C15 16.1639 14.6639 16.5 14.25 16.5C14.0643 16.501 13.8821 16.449 13.725 16.35L13.0253 15.9C12.7051 15.6954 12.2954 15.6954 11.9753 15.9L11.2747 16.35C10.9546 16.5546 10.5449 16.5546 10.2248 16.35L9.525 15.9C9.20489 15.6954 8.79511 15.6954 8.475 15.9L7.77525 16.35C7.45514 16.5546 7.04536 16.5546 6.72525 16.35L6.02475 15.9C5.70464 15.6954 5.29486 15.6954 4.97475 15.9L4.275 16.35C4.11786 16.449 3.93571 16.501 3.75 16.5C3.33606 16.5 3 16.1639 3 15.75L9.75 12"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/** Compliance Documents table's "Company Registration Certificate" row icon — a document with a
+ * ribbon/seal, matching the Figma export exactly (node 1143:2829). */
+export function CompanyCertificateIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 14.25 16.5002" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path
+        d="M8.25 15.75H12C12.8279 15.75 13.5 15.0779 13.5 14.25V5.25001C13.5012 4.76996 13.3106 4.30934 12.9705 3.97051L10.2795 1.27951C9.94067 0.939451 9.48004 0.748828 9 0.750005H3C2.17213 0.750005 1.5 1.42213 1.5 2.25001V4.72501"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M9 0.750005V4.50001C9 4.91394 9.33606 5.25001 9.75 5.25001H13.5M4.2675 11.6093L5.235 15.2693C5.27692 15.4117 5.23088 15.5654 5.11758 15.6613C5.00428 15.7573 4.84505 15.7773 4.7115 15.7125L3.32925 15.0758C3.12116 14.9742 2.87785 14.9745 2.67 15.0765L1.2855 15.714C1.15204 15.7765 0.994347 15.755 0.882444 15.6592C0.770542 15.5633 0.725179 15.4107 0.7665 15.2693L1.734 11.6093"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M0.75 9.75001C0.75 10.9918 1.75819 12 3 12C4.24181 12 5.25 10.9918 5.25 9.75001C5.25 8.5082 4.24181 7.50001 3 7.50001C1.75819 7.50001 0.75 8.5082 0.75 9.75001H0.75"
+        stroke="currentColor"
+        strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
