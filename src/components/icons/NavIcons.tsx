@@ -74,6 +74,20 @@ export function PromotionsIcon(props: IconProps) {
   );
 }
 
+/** Sidebar "Resellers" nav item icon — a hub-and-spoke network glyph (one node feeding two
+ * others), representing the affiliate/reseller network distinct from `VendorsIcon`'s storefront
+ * glyph. Figma "re-seller" screen, node 1177:69 → 1177:72 (Group6). */
+export function ResellersIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 16.5 16.5" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path d="M12 11.25H15C15.4139 11.25 15.75 11.5861 15.75 12V15C15.75 15.4139 15.4139 15.75 15 15.75H12C11.5861 15.75 11.25 15.4139 11.25 15V12C11.25 11.5861 11.5861 11.25 12 11.25V11.25" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M1.5 11.25H4.5C4.91394 11.25 5.25 11.5861 5.25 12V15C5.25 15.4139 4.91394 15.75 4.5 15.75H1.5C1.08606 15.75 0.75 15.4139 0.75 15V12C0.75 11.5861 1.08606 11.25 1.5 11.25V11.25" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M6.75 0.75H9.75C10.1639 0.75 10.5 1.08606 10.5 1.5V4.5C10.5 4.91394 10.1639 5.25 9.75 5.25H6.75C6.33606 5.25 6 4.91394 6 4.5V1.5C6 1.08606 6.33606 0.75 6.75 0.75V0.75" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M3 11.25V9C3 8.58606 3.33606 8.25 3.75 8.25H12.75C13.1639 8.25 13.5 8.58606 13.5 9V11.25M8.25 8.25V5.25" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 export function CustomersIcon(props: IconProps) {
   return (
     <svg viewBox="0 0 15 16.5" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>

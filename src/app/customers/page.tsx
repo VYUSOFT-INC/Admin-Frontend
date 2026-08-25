@@ -7,6 +7,8 @@ import { Card } from "@/components/ui/Card";
 import { CustomerSearchBar } from "@/components/customers/CustomerSearchBar";
 import { CustomerProfileCard } from "@/components/customers/CustomerProfileCard";
 import { CustomerOrdersTable } from "@/components/customers/CustomerOrdersTable";
+import { CustomerSavedAddresses } from "@/components/customers/CustomerSavedAddresses";
+import { CustomerActivityLog } from "@/components/customers/CustomerActivityLog";
 import { CustomerAdminActions } from "@/components/customers/CustomerAdminActions";
 import { CustomerSearchEmptyState } from "@/components/customers/CustomerSearchEmptyState";
 import { CUSTOMERS, type Customer } from "@/lib/mock-data/customers";
@@ -48,7 +50,7 @@ function CustomersPageContent() {
         const matchesPhone = qDigits.length > 0 && normalizePhone(customer.phone).includes(qDigits);
         const matchesEmail = customer.email.toLowerCase().includes(q);
         const matchesName = customer.name.toLowerCase().includes(q);
-        const matchesOrder = customer.recentOrders.some((order) => order.orderNumber.toLowerCase().includes(q));
+        const matchesOrder = customer.orderHistory.some((order) => order.orderNumber.toLowerCase().includes(q));
         return matchesPhone || matchesEmail || matchesName || matchesOrder;
       }) ?? null
     );
@@ -87,15 +89,22 @@ function CustomersPageContent() {
         {searchedQuery === null ? (
           <CustomerSearchEmptyState />
         ) : matchedCustomer ? (
-          <>
+          // Keyed by customer id so switching between search results (e.g. via the global
+          // search dropdown while already on this page) remounts the order table's pagination
+          // page and the two collapsible sections' open/closed state, instead of carrying a
+          // stale page number or collapsed state over from the previously viewed customer — the
+          // same `key={slug}` remount fix used on the Vendor Detail screen.
+          <div key={matchedCustomer.id} className="flex flex-col gap-6">
             <CustomerProfileCard customer={matchedCustomer} />
-            <CustomerOrdersTable orders={matchedCustomer.recentOrders} />
+            <CustomerOrdersTable orders={matchedCustomer.orderHistory} />
+            <CustomerSavedAddresses addresses={matchedCustomer.addresses} />
+            <CustomerActivityLog entries={matchedCustomer.activityLog} />
             <CustomerAdminActions
               customer={matchedCustomer}
               onToggleBlock={handleToggleBlock}
               onAddNote={handleAddNote}
             />
-          </>
+          </div>
         ) : (
           <Card className="px-6 py-10 text-center">
             <p className="text-sm font-bold text-ink">No customer found for &ldquo;{searchedQuery}&rdquo;</p>

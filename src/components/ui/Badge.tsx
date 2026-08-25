@@ -9,7 +9,10 @@ export type BadgeVariant =
   | "info"
   | "purple"
   | "sky"
-  | "vendorTag";
+  | "vendorTag"
+  | "gold"
+  | "silver"
+  | "starterTier";
 
 const VARIANT_CLASSES: Record<BadgeVariant, string> = {
   danger: "bg-primary-soft text-primary",
@@ -28,6 +31,15 @@ const VARIANT_CLASSES: Record<BadgeVariant, string> = {
    * where "Online Seller"/"Physical Store" render identically instead of the red/green split
    * `danger`/`success` get elsewhere (e.g. Dashboard's Pending Vendor Approvals card). */
   vendorTag: "bg-[#fff3f5] text-ink",
+  /** Amber-gold — Reseller Management's "Gold" performance-tier tag (Figma "re-seller", node
+   * 1177:229/1177:230), distinct from `warning`'s more orange shade. */
+  gold: "bg-[#fef4cc] text-[#a16207]",
+  /** Blue — Reseller Management's "Silver" performance-tier tag, one shade lighter/bluer than
+   * `info` so Silver doesn't read the same as generic blue info tags elsewhere. */
+  silver: "bg-[#e4eefe] text-[#2563eb]",
+  /** Pale pink with gray text — Reseller Management's "Starter" performance-tier tag; kept
+   * distinct from `muted` (whose background is the neutral `surface-tint`, not this pink tint). */
+  starterTier: "bg-[#ffeef1] text-gray-500",
 };
 
 export interface BadgeProps {
