@@ -27,6 +27,10 @@ import type { SVGProps } from "react";
  * checkmark reuses `CheckSmallIcon` from `VendorDetailIcons.tsx`. Only `SubcategoryArrowIcon`
  * below (the "↳" glyph marking a sub-category row) is a genuinely new export for that screen.
  *
+ * The "Reseller Program" sub-nav icon (`ResellerProgramIcon`) is a genuine Figma export (node
+ * 1177:1350's icon layer) — a seal/badge glyph with a percent-style diagonal slash, distinct from
+ * `PercentIcon`'s plain percent sign, so kept as its own new export rather than reused.
+ *
  * The Tax & Compliance panel (node 1143:2483) again verified every icon against existing exports
  * first: "Preview Invoice Template" reuses `IdCardIcon` from `VendorDetailIcons.tsx` (the Figma
  * export's path data is pixel-identical to that icon, despite the button's own label suggesting an
@@ -268,6 +272,22 @@ export function TaxComplianceIcon(props: IconProps) {
         strokeLinejoin="round"
       />
       <path d="M3.75 7.5L5.3125 9.0625L8.75 5.625" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+/** "Reseller Program" sub-nav icon — a seal/badge glyph with a percent-style diagonal slash,
+ * matching the Figma export exactly (node 1177:1350). */
+export function ResellerProgramIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path
+        d="M2.40625 5.3875C2.22085 4.55234 2.47536 3.68037 3.08092 3.07608C3.68648 2.47179 4.55898 2.2191 5.39375 2.40625C5.85317 1.68774 6.64717 1.25299 7.5 1.25299C8.35283 1.25299 9.14683 1.68774 9.60625 2.40625C10.4423 2.21827 11.3164 2.47164 11.9224 3.0776C12.5284 3.68356 12.7817 4.55766 12.5937 5.39375C13.3123 5.85317 13.747 6.64717 13.747 7.5C13.747 8.35283 13.3123 9.14683 12.5937 9.60625C12.7809 10.441 12.5282 11.3135 11.9239 11.9191C11.3196 12.5246 10.4477 12.7792 9.6125 12.5938C9.15365 13.3151 8.35802 13.7519 7.50312 13.7519C6.64823 13.7519 5.8526 13.3151 5.39375 12.5938C4.55898 12.7809 3.68648 12.5282 3.08092 11.9239C2.47536 11.3196 2.22085 10.4477 2.40625 9.6125C1.68211 9.15422 1.24317 8.35697 1.24317 7.5C1.24317 6.64303 1.68211 5.84578 2.40625 5.3875M9.375 5.625L5.625 9.375M5.625 5.625H5.63125M9.375 9.375H9.38125"
+        stroke="currentColor"
+        strokeWidth="1.25"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }

@@ -1,9 +1,9 @@
 /**
  * Mock data for the Settings section. "Commission Rates" (Figma node 1071:8652), "Payout
  * Schedule" (node 1071:8929), "Category Management" (node 1071:9230), "Platform Config"
- * (node 1071:9795), "Shipping" (node 1143:1675), "Tax & Compliance" (node 1143:2483), and
- * "Pickup & Store" (node 1071:10046) are all built — every `SETTINGS_SUB_NAV` destination now
- * links somewhere real.
+ * (node 1071:9795), "Shipping" (node 1143:1675), "Tax & Compliance" (node 1143:2483),
+ * "Pickup & Store" (node 1071:10046), and "Reseller Program" (node 1177:1184) are all built —
+ * every `SETTINGS_SUB_NAV` destination now links somewhere real.
  *
  * Standalone-mock note: these category commission rates are a *forward-looking configuration*
  * an admin edits here — matching the Figma copy "Changes apply to future settlements." They are
@@ -15,6 +15,8 @@
  * mirrors how `CouponForm.tsx` and `BannersGrid.tsx` mock their own save round-trips without
  * touching unrelated mock data elsewhere.
  */
+import type { ResellerTier } from "@/lib/mock-data/resellers";
+
 export interface CommissionCategoryRate {
   /** Matches the display categories used across the catalog (see `products.ts`'s `category`
    * field) closely enough to read as the same taxonomy, though this table groups a few of those
@@ -48,8 +50,8 @@ export interface SettingsSubNavItem {
   isAvailable: boolean;
 }
 
-/** Order matches the Figma "tax and compliance" screen's own sub-nav screenshot exactly:
- * "Tax & Compliance" sits between "Shipping" and "Pickup & Store". */
+/** Order matches the Figma "reseller program" screen's own sub-nav screenshot exactly:
+ * "Reseller Program" is the eighth and last entry, after "Pickup & Store". */
 export const SETTINGS_SUB_NAV: SettingsSubNavItem[] = [
   { label: "Commission Rates", slug: "commission", isAvailable: true },
   { label: "Payout Schedule", slug: "payout-schedule", isAvailable: true },
@@ -58,6 +60,7 @@ export const SETTINGS_SUB_NAV: SettingsSubNavItem[] = [
   { label: "Shipping", slug: "shipping", isAvailable: true },
   { label: "Tax & Compliance", slug: "tax-compliance", isAvailable: true },
   { label: "Pickup & Store", slug: "pickup-store", isAvailable: true },
+  { label: "Reseller Program", slug: "reseller-program", isAvailable: true },
 ];
 
 /**
@@ -273,3 +276,143 @@ export const PLATFORM_CATEGORIES: PlatformCategory[] = [
 /** Top-level categories expanded by default on first render, matching the two branches Figma
  * shows as "(parent, expanded)" — every other branch starts collapsed. */
 export const DEFAULT_EXPANDED_CATEGORY_IDS: string[] = ["cat-womens-ethnic-wear", "cat-accessories"];
+
+// ---------------------------------------------------------------------------
+// "Reseller Program" settings (Figma "reseller program", node 1177:1184) — the eighth and final
+// Settings sub-page: whether reseller registration/link tracking is active platform-wide, the
+// per-category commission rates MIVYU pays resellers, the auto-assigned performance-tier ladder,
+// and the eligibility/attribution/payout rules applied to every registered reseller. This is the
+// configuration screen behind the read-only reseller data in `resellers.ts` (the "Re-seller" list
+// and "Reseller Detail" screens) — see the standalone-mock notes below for how the two relate.
+// ---------------------------------------------------------------------------
+
+/** "Program Status" card (Figma node 1177:1363) — the master on/off switch for the whole reseller
+ * program. Mirrors this file's other single-flag settings objects (e.g. `codAvailable` on
+ * `PlatformConfigSettings`) rather than a bare boolean export, so `ResellerProgramStatusCard` can
+ * follow the same draft-state Save pattern as every other card on this screen. */
+export interface ResellerProgramStatusSettings {
+  active: boolean;
+}
+
+export const RESELLER_PROGRAM_STATUS: ResellerProgramStatusSettings = { active: true };
+
+/** "Category-wise Commission Rates" card (Figma node 1177:1389) — what MIVYU pays *resellers* per
+ * category, explicitly called out in the Figma copy as separate from `COMMISSION_CATEGORY_RATES`
+ * above (the vendor-side commission MIVYU charges *sellers*). The category taxonomy is close to
+ * but not identical to that table's (e.g. "Women's Western" / "Activewear" here vs. "Western Wear"
+ * / "Activewear & Sports" there) — kept as its own list since that's exactly what the Figma design
+ * shows for this screen, rather than silently reconciling two independently-sourced category
+ * labels. Standalone-mock note, matching this file's other tables: there's no backend joining this
+ * back to `COMMISSION_CATEGORY_RATES` or to `resellers.ts`'s seeded `commissionEarned` figures. */
+export interface ResellerCommissionRate {
+  category: string;
+  /** Whole-or-half-percent commission rate, e.g. `8` or `7.5`. */
+  commissionPercent: number;
+}
+
+export const RESELLER_COMMISSION_RATES: ResellerCommissionRate[] = [
+  { category: "Women's Ethnic Wear", commissionPercent: 8 },
+  { category: "Women's Western", commissionPercent: 7.5 },
+  { category: "Men's Casual Wear", commissionPercent: 6.5 },
+  { category: "Footwear", commissionPercent: 5 },
+  { category: "Accessories", commissionPercent: 6 },
+  { category: "Kids' Wear", commissionPercent: 6 },
+  { category: "Activewear", commissionPercent: 7 },
+  { category: "Lingerie & Innerwear", commissionPercent: 5.5 },
+];
+
+/** "Performance Tiers" card (Figma node 1177:1470) — the read-only per-tier display (GMV range,
+ * commission formula, benefits) shown above the two editable tier-boundary inputs below. Reuses
+ * `ResellerTier` from `resellers.ts` so this screen's tier ladder and the Resellers list/detail
+ * screens' `Reseller.tier` field stay the same three-value type. */
+export interface ResellerPerformanceTierInfo {
+  tier: ResellerTier;
+  /** "Base" for Starter, "Bonus +0.5%" for Silver, "Bonus +1.5%" for Gold — matches the Figma
+   * badge copy on each tier card exactly. */
+  badgeLabel: string;
+  gmvRangeLabel: string;
+  commissionFormula: string;
+  benefits: string[];
+}
+
+export const RESELLER_PERFORMANCE_TIER_INFO: ResellerPerformanceTierInfo[] = [
+  {
+    tier: "Starter",
+    badgeLabel: "Base",
+    gmvRangeLabel: "₹0 – ₹50,000 monthly GMV",
+    commissionFormula: "Commission = base rate",
+    benefits: ["Basic dashboard", "Standard support"],
+  },
+  {
+    tier: "Silver",
+    badgeLabel: "Bonus +0.5%",
+    gmvRangeLabel: "₹50,000 – ₹2,00,000 monthly GMV",
+    commissionFormula: "Commission = base + 0.5% bonus",
+    benefits: ["Analytics access", "Priority support"],
+  },
+  {
+    tier: "Gold",
+    badgeLabel: "Bonus +1.5%",
+    gmvRangeLabel: "₹2,00,000+ monthly GMV",
+    commissionFormula: "Commission = base + 1.5% bonus",
+    benefits: ["Dedicated support", "Featured reseller badge"],
+  },
+];
+
+/** The two editable monthly-GMV cutoffs between tiers, in whole rupees (Figma's "Starter → Silver
+ * boundary" / "Silver → Gold boundary" inputs: ₹50,000 and ₹2,00,000).
+ *
+ * Standalone-mock note: these intentionally do **not** match `resellers.ts`'s
+ * `NEXT_TIER_THRESHOLD` export (₹1.00L / ₹3.00L / ₹5.00L "monthly performance" targets shown on
+ * the Reseller Detail screen). Both figures are verified, genuine Figma content from their own
+ * screens — this card's ₹50,000 / ₹2,00,000 boundaries were confirmed against a fresh screenshot
+ * of node 1177:1184, not assumed — and, like `COMMISSION_CATEGORY_RATES` vs. `payments.ts`'s flat
+ * 10% commission elsewhere in this file, there's no backend here to reconcile a forward-looking
+ * admin-editable config screen with figures baked into a different, already-shipped screen's mock
+ * data. Editing these boundaries does not rewrite `NEXT_TIER_THRESHOLD`. */
+export interface ResellerTierBoundaries {
+  starterToSilver: number;
+  silverToGold: number;
+}
+
+export const RESELLER_TIER_BOUNDARIES: ResellerTierBoundaries = {
+  starterToSilver: 50000,
+  silverToGold: 200000,
+};
+
+/** "Payout cycle" dropdown options on the Program Rules card (Figma node 1177:1550). Only
+ * "Monthly on 1st" is shown selected in the design; the other three options round out a plausible
+ * cadence list the same way `SETTLEMENT_CYCLE_OPTIONS` does for vendor payouts above. */
+export type ResellerPayoutCycle = "Weekly" | "Bi-weekly" | "Monthly on 1st" | "Monthly on 15th";
+export const RESELLER_PAYOUT_CYCLE_OPTIONS: ResellerPayoutCycle[] = ["Weekly", "Bi-weekly", "Monthly on 1st", "Monthly on 15th"];
+
+/** "Program Rules" card (Figma node 1177:1550) — eligibility, attribution, payout, and promotion
+ * limits applied to every registered reseller. Standalone-mock note, matching this file's other
+ * tables: not wired to `resellers.ts`'s seeded `activeLinks`/`commissionEarned` figures — editing
+ * `maxLinksPerResellerPerDay` here doesn't retroactively cap any seeded reseller's `activeLinks`. */
+export interface ResellerProgramRules {
+  /** Whole hours after a click within which a sale is still credited to the reseller. */
+  cookieDurationHours: number;
+  /** Whole-rupee floor — orders below this value earn no reseller commission. */
+  minimumOrderValueForCommission: number;
+  /** Whole-rupee balance a reseller must accumulate before a payout is triggered. */
+  minimumPayoutThreshold: number;
+  payoutCycle: ResellerPayoutCycle;
+  /** Blocks a reseller from earning commission on their own purchases. */
+  selfPurchaseDetectionEnabled: boolean;
+  /** Whole-count cap on affiliate links a single reseller can generate per day. */
+  maxLinksPerResellerPerDay: number;
+  /** When on, resellers can generate links for any active product; when off, vendors must opt in
+   * per product. */
+  allowPromoteAllProducts: boolean;
+}
+
+export const RESELLER_PROGRAM_RULES: ResellerProgramRules = {
+  cookieDurationHours: 48,
+  minimumOrderValueForCommission: 199,
+  minimumPayoutThreshold: 500,
+  payoutCycle: "Monthly on 1st",
+  selfPurchaseDetectionEnabled: true,
+  maxLinksPerResellerPerDay: 50,
+  allowPromoteAllProducts: true,
+};
