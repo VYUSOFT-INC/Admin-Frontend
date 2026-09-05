@@ -112,8 +112,8 @@ export function VendorOverviewTabs({
                     }`}
                   >
                     <div className="flex min-w-0 items-start gap-2.5">
-                      <span className="flex size-[34px] shrink-0 items-center justify-center rounded-lg bg-blue-50">
-                        <Icon className="size-[18px] text-blue-600" />
+                      <span className="flex size-[34px] shrink-0 items-center justify-center rounded-lg bg-primary-lighter">
+                        <Icon className="size-[18px] text-primary" />
                       </span>
                       <span className="flex min-w-0 flex-1 flex-col gap-0.5">
                         <span className="truncate text-[13px] font-bold text-ink">{doc.name}</span>
